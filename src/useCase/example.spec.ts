@@ -6,7 +6,7 @@ import path from "path";
 const feature = loadFeature(path.join(__dirname, './example.feature'));
 
 defineFeature(feature, (test) => {
-  test("Guessing correctly", ({ given, when, then }) => {
+  test('Guessing correctly', ({ given, when, then }) => {
     let guesser = new Guesser();
 
     given(/^the Guesser was assigned the word "(.*)"$/, (arg0) => {
@@ -21,7 +21,7 @@ defineFeature(feature, (test) => {
       /^the Guesser should update the number of correct guesses to (\d+)$/,
       (arg0) => {
         expect(guesser.getNumberCorrectGuesses()).toEqual(Number(arg0));
-      }
+      },
     );
   });
 });

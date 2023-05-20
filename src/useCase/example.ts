@@ -1,5 +1,5 @@
 export class Guesser {
-  private word: string = "";
+  private word: string = '';
   private correctGuesses = 0;
 
   public setWord(word: string) {
