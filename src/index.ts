@@ -1,6 +1,6 @@
-import express from "express";
-import logger from "./custom-logger";
-import router from "./routes/routes";
+import express from 'express';
+import logger from './custom-logger';
+import router from './routes/routes';
 
 const app = express();
 
