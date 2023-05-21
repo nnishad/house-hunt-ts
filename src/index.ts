@@ -6,6 +6,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swaggerConfig';
 import cronJob from './rightmove/scheduler';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = express();
 
 cronJob.start();
@@ -18,6 +21,7 @@ app.get('/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
+
 // Swagger UI setup
 app.use(
   '/api-docs',
@@ -26,8 +30,7 @@ app.use(
 );
 
 // Define the MongoDB connection URL
-const MONGODB_URI =
-  'mongodb+srv://nikhilnishad:gznbo2yqBooKxWWA@cluster0.sv60irs.mongodb.net/?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI ?? '';
 
 // Connect to MongoDB
 mongoose
