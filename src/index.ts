@@ -2,8 +2,6 @@ import express from 'express';
 import logger from './custom-logger';
 import router from './routes/routes';
 import mongoose from 'mongoose';
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './swaggerConfig';
 import cronJob from './rightmove/scheduler';
 
 import dotenv from 'dotenv';
@@ -16,18 +14,6 @@ cronJob.start();
 app.use(express.json());
 
 app.use(router);
-
-app.get('/swagger.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
-});
-
-// Swagger UI setup
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, { explorer: true }),
-);
 
 // Define the MongoDB connection URL
 const MONGODB_URI = process.env.MONGODB_URI ?? '';

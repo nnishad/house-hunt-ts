@@ -40,7 +40,7 @@ alertRouter.get('/search', async (req, res, next) => {
 
     res.json(cleanedalertList);
   } catch (error) {
-    console.error('Error occurred:', error);
+    logger.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -100,7 +100,7 @@ alertRouter.post('/add', async (req, res) => {
       release();
     }
   } catch (error) {
-    console.error('Error occurred:', error);
+    logger.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -155,7 +155,7 @@ alertRouter.delete('/removeOne', async (req, res, next) => {
       release();
     }
   } catch (error) {
-    console.error('Error occurred:', error);
+    logger.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -221,6 +221,7 @@ alertRouter.put('/:id', async (req, res, next) => {
     const updatedAlert = await alert.save();
     res.json(updatedAlert);
   } catch (error) {
+    logger.error('Error occurred:', error);
     res.status(500).json({ error: 'Failed to update alert' });
   }
 });
