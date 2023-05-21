@@ -9,11 +9,6 @@ const swaggerOptions: swaggerJSDoc.Options = {
       version: '1.0.0',
       description: 'API documentation using Swagger',
     },
-    servers: [
-      {
-        url: 'http://localhost:3001', // Replace with your server URL
-      },
-    ],
     components: {
       schemas: {
         Alert: {

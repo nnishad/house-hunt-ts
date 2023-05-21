@@ -7,6 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger'; // Import your Swagger configuration file
 
 import dotenv from 'dotenv';
+import { Request, Response, NextFunction } from 'express-serve-static-core';
+
 dotenv.config();
 
 const app = express();
@@ -18,8 +20,15 @@ app.use(express.json());
 // Other app configurations and middleware
 
 // Swagger UI setup
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use(
+  '/',
+  swaggerUi.serve,
+  (req: Request, res: Response, next: NextFunction) => {
+    const serverUrl = `${req.protocol}://${req.get('host')}`;
+    const swaggerConfig = { ...swaggerSpec, servers: [{ url: serverUrl }] };
+    swaggerUi.setup(swaggerConfig)(req, res, next);
+  },
+);
 app.use(router);
 
 // Define the MongoDB connection URL
