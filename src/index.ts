@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Swagger UI setup
 app.use(
-  '/',
+  '/api',
   swaggerUi.serve,
   (req: Request, res: Response, next: NextFunction) => {
     const serverUrl = `${req.protocol}://${req.get('host')}`;
