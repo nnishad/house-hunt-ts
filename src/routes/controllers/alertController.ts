@@ -24,19 +24,17 @@ alertRouter.get('/searchAll', async function (req, res, next) {
 /**
  * @swagger
  * /alert/search:
- *   get:
+ *   post:
  *     summary: Search alerts by email
- *     description: Endpoint to search alerts based on the provided email.
- *     parameters:
- *       - in: body
- *         name: email
- *         description: Email to search alerts for
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Success
@@ -59,9 +57,9 @@ alertRouter.get('/searchAll', async function (req, res, next) {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-alertRouter.get('/search', async (req, res, next) => {
+alertRouter.post('/search', async (req, res, next) => {
   const { email } = req.body;
-
+  console.log(req);
   try {
     const alertList = await Alert.find({
       taggedUsers: email,
