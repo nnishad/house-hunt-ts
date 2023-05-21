@@ -96,13 +96,7 @@ function alertForProperty(propertyDetailsList: any[], taggedUsers: any[]) {
 
 export const fetchProperties = (alert: any) => {
   (async () => {
-    const browser = await puppeteer.launch({
-      executablePath:
-        '/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta',
-      headless: false,
-      userDataDir:
-        '/Users/nnishad/Library/Application Support/Google/Chrome Beta',
-    });
+    const browser = await puppeteer.launch();
 
     const page = await browser.newPage();
 
