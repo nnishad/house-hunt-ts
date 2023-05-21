@@ -4,8 +4,11 @@ import router from './routes/routes';
 import mongoose from 'mongoose';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swaggerConfig';
+import cronJob from './rightmove/scheduler';
+
 const app = express();
 
+cronJob.start();
 // Middleware to parse request body as JSON
 app.use(express.json());
 

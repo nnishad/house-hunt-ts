@@ -1,7 +1,12 @@
 import express from 'express';
 import Alert from '../../models/alert';
 import logger from '../../custom-logger';
+import { Mutex } from 'async-mutex';
 
+// Define the global flag variable
+(global as any).databaseUpdated = true;
+// Initialize the mutex
+const mutex = new Mutex();
 export const alertRouter = express.Router();
 
 /* GET Alert listing. */
@@ -82,11 +87,18 @@ alertRouter.post('/add', async (req, res) => {
         taggedUsers: [email],
       });
     }
-
-    // Save the criteria
-    await criteria.save();
-
-    res.json({ message: 'Search criteria updated or created successfully' });
+    // Acquire the lock before updating the database
+    const release = await mutex.acquire();
+    try {
+      // Save the criteria
+      await criteria.save();
+      // Set the flag to indicate that the database has been updated
+      (global as any).databaseUpdated = true;
+      res.json({ message: 'Search criteria updated or created successfully' });
+    } finally {
+      // Release the lock after updating the database
+      release();
+    }
   } catch (error) {
     console.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -130,10 +142,18 @@ alertRouter.delete('/removeOne', async (req, res, next) => {
       );
     }
 
-    // Save the updated criteria
-    await criteria.save();
-
-    res.json({ message: `Email '${email}' removed from taggedUsers list` });
+    // Acquire the lock before updating the database
+    const release = await mutex.acquire();
+    try {
+      // Save the criteria
+      await criteria.save();
+      // Set the flag to indicate that the database has been updated
+      (global as any).databaseUpdated = true;
+      res.json({ message: `Email '${email}' removed from taggedUsers list` });
+    } finally {
+      // Release the lock after updating the database
+      release();
+    }
   } catch (error) {
     console.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -151,21 +171,29 @@ alertRouter.delete('/removeAll', async (req, res) => {
       return res.status(404).json({ error: 'Email not found in any criteria' });
     }
 
-    // Update each criteria document
-    await Promise.all(
-      alertList.map(async (criteria) => {
-        criteria.taggedUsers = criteria.taggedUsers.filter(
-          (user) => user !== email,
-        );
-        await criteria.save();
-      }),
-    );
-
-    res.json({
-      message: `Email '${email}' removed from taggedUsers list for all criteria`,
-    });
+    // Acquire the lock before updating the database
+    const release = await mutex.acquire();
+    try {
+      // Update each criteria document
+      await Promise.all(
+        alertList.map(async (criteria) => {
+          criteria.taggedUsers = criteria.taggedUsers.filter(
+            (user) => user !== email,
+          );
+          await criteria.save();
+        }),
+      );
+      // Set the flag to indicate that the database has been updated
+      (global as any).databaseUpdated = true;
+      res.json({
+        message: `Email '${email}' removed from taggedUsers list for all criteria`,
+      });
+    } finally {
+      // Release the lock after updating the database
+      release();
+    }
   } catch (error) {
-    console.error('Error occurred:', error);
+    logger.error('Error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

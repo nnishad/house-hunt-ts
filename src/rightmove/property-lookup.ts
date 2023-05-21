@@ -1,5 +1,7 @@
 import puppeteer, { Page } from 'puppeteer';
 import logger from '../custom-logger';
+import fs from 'fs';
+const FILE_PATH = 'ids.txt';
 
 async function getPropertyDetails(page: Page, index: number) {
   const propertyDetails = await page.evaluate((index) => {
@@ -52,9 +54,40 @@ async function getPropertyDetails(page: Page, index: number) {
       additional,
     };
   }, index);
+  return propertyDetails;
 }
 
-export const fetchProperties = () => {
+function appendIdsToFile(newIds: string[]): void {
+  const fileData = fs.readFileSync(FILE_PATH, { encoding: 'utf8', flag: 'a+' });
+  const ids = fileData.split('\n');
+
+  for (const id of newIds) {
+    if (!ids.includes(id)) {
+      ids.push(id);
+      console.log(`ID ${id} appended to file`);
+    } else {
+      console.log(`ID ${id} already exists in file`);
+    }
+  }
+
+  const updatedData = ids.join('\n');
+  fs.writeFileSync(FILE_PATH, updatedData);
+  console.log('IDs appended to file');
+}
+
+function checkIfIdExists(id: string): boolean {
+  const fileData = fs.readFileSync(FILE_PATH, { encoding: 'utf8', flag: 'a+' });
+  const ids = fileData.split('\n');
+
+  return ids.includes(id);
+}
+
+function alertForProperty(propertyDetailsList: any[]) {
+  logger.info(propertyDetailsList);
+}
+
+export const fetchProperties = (alert: any) => {
+
   (async () => {
     const browser = await puppeteer.launch({
       executablePath:
@@ -81,12 +114,12 @@ export const fetchProperties = () => {
     await page.goto(
       'https://www.rightmove.co.uk/property-to-rent/find.html?' +
         'searchType=RENT' +
-        '&locationIdentifier=OUTCODE%5E923' +
+        `&locationIdentifier=${alert.locationIdentifier}` +
         '&insId=1' +
-        '&radius=0.0' +
+        `&radius=${alert.radius}` +
         '&minPrice=' +
-        '&maxPrice=' +
-        '&minBedrooms=' +
+        `&maxPrice=${alert.maxPrice}` +
+        `&minBedrooms=${alert.minBedrooms}` +
         '&maxBedrooms=' +
         '&displayPropertyType=' +
         '&maxDaysSinceAdded=' +
@@ -97,7 +130,7 @@ export const fetchProperties = () => {
         '&oldDisplayPropertyType=' +
         '&oldPrimaryDisplayPropertyType=' +
         '&letType=' +
-        '&letFurnishType=' +
+        `&letFurnishType=${alert.letFurnishType}` +
         '&houseFlatShare=',
     );
 
@@ -107,11 +140,18 @@ export const fetchProperties = () => {
 
     const properties = await page.$$(searchResultSelector);
     // const propertyElements = await page.$$('.propertyCard');
-
+    const propertyDetailsList = [];
     for (let index = 0; index < properties.length; index++) {
-      await getPropertyDetails(page, index);
+      const propertyDetails = await getPropertyDetails(page, index);
+      const { propertyId } = propertyDetails;
+      if (propertyId !== undefined && !checkIfIdExists(propertyId)) {
+        propertyDetailsList.push(propertyDetails);
+      }
     }
-
+    alertForProperty(propertyDetailsList);
+    appendIdsToFile(
+      propertyDetailsList.map((property) => property?.propertyId ?? ''),
+    );
     await browser.close();
   })();
 };
