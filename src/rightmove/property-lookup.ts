@@ -1,5 +1,5 @@
-import puppeteer, { Page } from "puppeteer";
-import logger from "../custom-logger";
+import puppeteer, { Page } from 'puppeteer';
+import logger from '../custom-logger';
 
 async function getPropertyDetails(page: Page, index: number) {
   const propertyDetails = await page.evaluate((index) => {
@@ -80,7 +80,8 @@ export const fetchProperties = () => {
 
     await page.goto(
       'https://www.rightmove.co.uk/property-to-rent/find.html?' +
-        'searchType=RENT&locationIdentifier=OUTCODE%5E923' +
+        'searchType=RENT' +
+        '&locationIdentifier=OUTCODE%5E923' +
         '&insId=1' +
         '&radius=0.0' +
         '&minPrice=' +
