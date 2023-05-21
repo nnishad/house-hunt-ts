@@ -24,7 +24,7 @@ const scheduler = async () => {
 };
 
 // Define the cron schedule
-const cronSchedule = '* * * * *'; // Run the task every minute
+const cronSchedule = '*/5 * * * *'; // Run the task 5 minute
 
 // Create the cron job
 const cronJob = cron.schedule(cronSchedule, scheduler);
