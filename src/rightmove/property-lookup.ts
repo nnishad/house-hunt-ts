@@ -96,7 +96,9 @@ function alertForProperty(propertyDetailsList: any[], taggedUsers: any[]) {
 
 export const fetchProperties = (alert: any) => {
   (async () => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+    });
 
     const page = await browser.newPage();
 
