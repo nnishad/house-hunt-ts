@@ -10,28 +10,6 @@ const mutex = new Mutex();
 export const alertRouter = express.Router();
 
 /* GET Alert listing. */
-/**
- * @swagger
- * /alert/searchAll:
- *   get:
- *     summary: Get all alerts
- *     description: Endpoint to retrieve all alerts.
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Alert'
- *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 alertRouter.get('/searchAll', async function (req, res, next) {
   try {
     const allAlert = await Alert.find();
