@@ -1,6 +1,8 @@
 import puppeteer, { Page } from 'puppeteer';
 import logger from '../custom-logger';
 import fs from 'fs';
+import { generateHTMLContent } from '../util/emailTemplate';
+import sendEmail from '../util/sendEmail';
 const FILE_PATH = 'ids.txt';
 
 async function getPropertyDetails(page: Page, index: number) {
@@ -82,12 +84,17 @@ function checkIfIdExists(id: string): boolean {
   return ids.includes(id);
 }
 
-function alertForProperty(propertyDetailsList: any[]) {
-  logger.info(propertyDetailsList);
+function alertForProperty(propertyDetailsList: any[], taggedUsers: any[]) {
+  // Generate the HTML content using the property object
+  const htmlContent = generateHTMLContent(propertyDetailsList);
+  taggedUsers.forEach((userEmail) => {
+    sendEmail(htmlContent, userEmail).then(() =>
+      logger.info(`Alert sen to ${userEmail}`),
+    );
+  });
 }
 
 export const fetchProperties = (alert: any) => {
-
   (async () => {
     const browser = await puppeteer.launch({
       executablePath:
@@ -98,7 +105,6 @@ export const fetchProperties = (alert: any) => {
     });
 
     const page = await browser.newPage();
-    logger.info('This is a log message');
 
     await page.goto('https://www.rightmove.co.uk/');
 
@@ -148,10 +154,14 @@ export const fetchProperties = (alert: any) => {
         propertyDetailsList.push(propertyDetails);
       }
     }
-    alertForProperty(propertyDetailsList);
-    appendIdsToFile(
-      propertyDetailsList.map((property) => property?.propertyId ?? ''),
-    );
+    if (propertyDetailsList.length > 0) {
+      alertForProperty(propertyDetailsList, alert.taggedUsers);
+      appendIdsToFile(
+        propertyDetailsList.map((property) => property?.propertyId ?? ''),
+      );
+    } else {
+      logger.info('No new property found');
+    }
     await browser.close();
   })();
 };
