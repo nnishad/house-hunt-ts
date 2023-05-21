@@ -10,6 +10,28 @@ const mutex = new Mutex();
 export const alertRouter = express.Router();
 
 /* GET Alert listing. */
+/**
+ * @swagger
+ * /alert/searchAll:
+ *   get:
+ *     summary: Get all alerts
+ *     description: Endpoint to retrieve all alerts.
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Alert'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 alertRouter.get('/searchAll', async function (req, res, next) {
   try {
     const allAlert = await Alert.find();
@@ -21,6 +43,44 @@ alertRouter.get('/searchAll', async function (req, res, next) {
 });
 
 // Read a Alert by ID
+/**
+ * @swagger
+ * /alert/search:
+ *   get:
+ *     summary: Search alerts by email
+ *     description: Endpoint to search alerts based on the provided email.
+ *     parameters:
+ *       - in: body
+ *         name: email
+ *         description: Email to search alerts for
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Alert'
+ *       404:
+ *         description: Email not found in any alert
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 alertRouter.get('/search', async (req, res, next) => {
   const { email } = req.body;
 
@@ -46,6 +106,48 @@ alertRouter.get('/search', async (req, res, next) => {
 });
 
 // Create a Alert
+/**
+ * @swagger
+ * /alert/add:
+ *   post:
+ *     summary: Add or update search criteria
+ *     description: Endpoint to add or update search criteria based on the provided parameters.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               locationIdentifier:
+ *                 type: string
+ *               radius:
+ *                 type: number
+ *               maxPrice:
+ *                 type: number
+ *               minBedrooms:
+ *                 type: number
+ *               letFurnishType:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 alertRouter.post('/add', async (req, res) => {
   const {
     locationIdentifier,
@@ -106,6 +208,54 @@ alertRouter.post('/add', async (req, res) => {
 });
 
 // Delete a Alert
+/**
+ * @swagger
+ * /alert/removeOne:
+ *   delete:
+ *     summary: Remove email from taggedUsers list
+ *     description: Endpoint to remove an email from the taggedUsers list based on the provided property details.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               locationIdentifier:
+ *                 type: string
+ *               radius:
+ *                 type: number
+ *               maxPrice:
+ *                 type: number
+ *               minBedrooms:
+ *                 type: number
+ *               letFurnishType:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Alert not found for given property details or email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 alertRouter.delete('/removeOne', async (req, res, next) => {
   const {
     locationIdentifier,
@@ -160,6 +310,44 @@ alertRouter.delete('/removeOne', async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /alert/removeAll:
+ *   delete:
+ *     summary: Remove email from taggedUsers list for all criteria
+ *     description: Endpoint to remove an email from the taggedUsers list for all criteria.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Email not found in any criteria
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 alertRouter.delete('/removeAll', async (req, res) => {
   const { email } = req.body;
 

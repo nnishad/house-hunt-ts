@@ -3,6 +3,8 @@ import logger from './custom-logger';
 import router from './routes/routes';
 import mongoose from 'mongoose';
 import cronJob from './rightmove/scheduler';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger'; // Import your Swagger configuration file
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -12,6 +14,11 @@ const app = express();
 cronJob.start();
 // Middleware to parse request body as JSON
 app.use(express.json());
+
+// Other app configurations and middleware
+
+// Swagger UI setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(router);
 
