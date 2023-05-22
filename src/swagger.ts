@@ -1,5 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
@@ -50,7 +52,7 @@ const swaggerOptions: swaggerJSDoc.Options = {
       },
     },
   },
-  apis: [path.resolve(__dirname, './routes/**/*.ts')], // Adjust the path to your route files
+  apis: ['**/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
