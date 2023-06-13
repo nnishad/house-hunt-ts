@@ -31,8 +31,8 @@ Before running the automation script, make sure you have the following:
 
 You can customize the automation script to fit your specific house hunting preferences:
 
-- Modify the filters in `config.ts` to define your desired location, price range, number of bedrooms, property type, and any additional criteria.
-- Adjust the scraping logic in `scraping.ts` to handle additional property listing websites or extract more data points if desired.
+- Modify the filters `use swagger endpoints` to define your desired location, price range, number of bedrooms, property type, and any additional criteria.
+- Adjust the scraping logic in `rightmove package` to handle additional property listing websites or extract more data points if desired.
 
 ## Limitations
 
