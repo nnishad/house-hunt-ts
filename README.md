@@ -1,43 +1,52 @@
-# 🧰 Simple TypeScript Starter | 2023
+# UK House Hunt Automation
 
-> We talk about a lot of **advanced Node.js and TypeScript** concepts on [the blog](https://khalilstemmler.com), particularly focused around Domain-Driven Design and large-scale enterprise application patterns. However, I received a few emails from readers that were interested in seeing what a basic TypeScript starter project looks like. So I've put together just that.
+The UK House Hunt Automation project is a TypeScript-based automation solution that utilizes Puppeteer for web scraping and MongoDB for data storage. It aims to simplify and enhance your house hunting process by automatically notifying you whenever a new property is listed that matches your specified filters. With this automation solution, you can stay up-to-date with the latest property listings without manually checking multiple websites. Let's find your dream home!
 
-### Features
+## Features
 
-- Minimal
-- TypeScript v4
-- Testing with Jest
-- Linting with Eslint and Prettier
-- Pre-commit hooks with Husky
-- VS Code debugger scripts
-- Local development with Nodemon
+- **Automated Property Monitoring**: The automation script uses Puppeteer to scrape popular property listing websites in the UK, such as Rightmove and Zoopla, to check for new property listings.
+- **Customizable Filters**: You can define your preferred filters, including location, price range, number of bedrooms, property type, and any other criteria relevant to your house hunt.
+- **Real-time Notifications**: Whenever a new property that matches your filters is found, you will receive instant notifications via email, SMS, or any other notification method of your choice.
+- **Efficient Data Storage**: The project utilizes MongoDB to store the scraped property data, allowing you to review and manage the listings conveniently.
+- **Flexible and Extensible**: The codebase is built using TypeScript, Puppeteer, and MongoDB, enabling easy customization and expansion to suit your specific requirements.
 
-### Scripts
+## Prerequisites
 
-#### `npm run start:dev`
+Before running the automation script, make sure you have the following:
 
-Starts the application in development using `nodemon` and `ts-node` to do hot reloading.
+- Node.js and npm installed on your machine.
+- MongoDB set up and running.
 
-#### `npm run start`
+## Getting Started
 
-Starts the app in production by first building the project with `npm run build`, and then executing the compiled JavaScript at `build/index.js`.
+1. Clone this repository to your local machine.
+2. Install the dependencies by running `npm install`.
+3. Configure the automation script with your preferred filters and notification settings in `config.ts`.
+4. Start your MongoDB server.
+5. Build the TypeScript code by running `npm run build`.
+6. Run the automation script using `npm start`.
+7. Sit back and let the automation scan for new property listings and notify you whenever a match is found.
 
-#### `npm run build`
+## Customization
 
-Builds the app at `build`, cleaning the folder first.
+You can customize the automation script to fit your specific house hunting preferences:
 
-#### `npm run test`
+- Modify the filters in `config.ts` to define your desired location, price range, number of bedrooms, property type, and any additional criteria.
+- Adjust the scraping logic in `scraping.ts` to handle additional property listing websites or extract more data points if desired.
 
-Runs the `jest` tests once.
+## Limitations
 
-#### `npm run test:dev`
+- The automation script relies on web scraping techniques and may be subject to changes in the structure or policies of the property listing websites it interacts with. Regular updates to the script may be required to ensure continued functionality.
+- Please use this automation project responsibly and respect the terms of service and usage policies of the property listing websites.
 
-Run the `jest` tests in watch mode, waiting for file changes.
+## Contributing
 
-#### `npm run prettier-format`
+Contributions to this automation project are welcome! If you encounter any issues, have suggestions for improvements, or want to add new features, please open an issue or submit a pull request.
 
-Format your code.
+## License
 
-#### `npm run prettier-watch`
+This project is licensed under the [MIT License](LICENSE).
 
-Format your code in watch mode, waiting for file changes.
+---
+
+Feel free to modify the above content to reflect the specific details and requirements of your project. Include any necessary instructions, customization options, and additional information that may be relevant to users interested in using or contributing to your house hunting automation solution.
