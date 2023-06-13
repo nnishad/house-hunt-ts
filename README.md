@@ -21,11 +21,11 @@ Before running the automation script, make sure you have the following:
 
 1. Clone this repository to your local machine.
 2. Install the dependencies by running `npm install`.
-3. Configure the automation script with your preferred filters and notification settings in `config.ts`.
 4. Start your MongoDB server.
 5. Build the TypeScript code by running `npm run build`.
 6. Run the automation script using `npm start`.
-7. Sit back and let the automation scan for new property listings and notify you whenever a match is found.
+7. now navigate to `http://host:port/api` and follow respective endpoint to configure filters and notification.
+8. Sit back and let the automation scan for new property listings and notify you whenever a match is found.
 
 ## Customization
 
